@@ -1,3 +1,9 @@
+let playerScore = 0;
+let computerScore = 0;
+const displayPlayerScore = document.querySelector('.my-score');
+const displayComputerScore = document.querySelector('.computer-score');
+const displayResult = document.querySelector('.result');
+
 function computerPlay() {
     let random = Math.floor(Math.random() * 3);
     if (random === 0) {
@@ -36,27 +42,41 @@ function playRound(playerSelection, computerSelection) {
     }
 }
 
-function game(){
-    let playerScore = 0;
-    let computerScore = 0;
-    for (let i = 0; i < 5; i++) {
-        const playerSelection = prompt('Rock, paper or scissors?').toLowerCase();
-        const computerSelection = computerPlay();
-        const result = playRound(playerSelection, computerSelection);
-        if (result === 'You win! Rock beats scissors.' || result === 'You win! Paper beats rock.' || result === 'You win! Scissors beats paper.') {
-            playerScore++;
-        } else if (result === 'You lose! Paper beats rock.' || result === 'You lose! Scissors beats paper.' || result === 'You lose! Rock beats scissors.') {
-            computerScore++;
-        }
-        console.log(result);
+function game(playerSelection){
+    const computerSelection = computerPlay();
+    const result = playRound(playerSelection, computerSelection);
+    displayResult.textContent = result;
+    if (result === 'You win! Rock beats scissors.' || result === 'You win! Paper beats rock.' || result === 'You win! Scissors beats paper.') {
+        playerScore++;
+        displayPlayerScore.textContent = playerScore;
+    } else if (result === 'You lose! Paper beats rock.' || result === 'You lose! Scissors beats paper.' || result === 'You lose! Rock beats scissors.') {
+        computerScore++;
+        displayComputerScore.textContent = computerScore;
     }
-    if (playerScore > computerScore) {
-        return 'You win the game!';
-    } else if (playerScore < computerScore) {
-        return 'You lose the game!';
-    } else {
-        return 'It\'s a tie!';
+
+    if (5 === playerScore) {
+        window.alert('You win the game!');
+        clearGame();
     }
+
+    if (5 === computerScore) {
+        window.alert('You lose the game!');
+       clearGame();
+    }
+  
 }
 
-console.log(game());
+function clearGame() {
+    playerScore = 0;
+    computerScore = 0;
+    displayPlayerScore.textContent = playerScore;
+    displayComputerScore.textContent = computerScore;
+    displayResult.textContent = null;
+}
+
+
+const buttons = document.querySelectorAll('button');
+buttons.forEach(button => button.addEventListener('click', function() {
+    playerChoice = button.outerText.toLowerCase();
+    game(playerChoice);
+}));
